@@ -1,0 +1,131 @@
+module Main where
+
+import Daml.Script
+import DA.Date
+
+-- 1. Supplier proposes an invoice to the Buyer
+template InvoiceProposal
+  with
+    supplier : Party
+    buyer : Party
+    invoiceId : Text
+    amount : Decimal
+    dueDate : Date
+  where
+    signatory supplier
+    observer buyer
+
+    choice AcceptInvoice : ContractId Invoice
+      controller buyer
+      do
+        create Invoice with ..
+
+    choice RejectInvoice : ()
+      controller buyer
+      do
+        return ()
+
+-- 2. Once accepted, the Invoice is officially recognized by both parties
+template Invoice
+  with
+    supplier : Party
+    buyer : Party
+    invoiceId : Text
+    amount : Decimal
+    dueDate : Date
+  where
+    signatory supplier, buyer
+
+    -- The supplier can request to factor this invoice with a specific financier
+    choice RequestFactoring : ContractId FactoringRequest
+      with
+        financier : Party
+        discountedAmount : Decimal
+      controller supplier
+      do
+        create FactoringRequest with ..
+
+-- 3. The Supplier's request to the Financier
+template FactoringRequest
+  with
+    supplier : Party
+    buyer : Party
+    financier : Party
+    invoiceId : Text
+    amount : Decimal
+    dueDate : Date
+    discountedAmount : Decimal
+  where
+    signatory supplier, buyer
+    observer financier
+
+    -- Financier agrees to fund the invoice at the discounted amount
+    choice Fund : ContractId FactoredInvoice
+      controller financier
+      do
+        -- (In a full implementation, a payment of `discountedAmount` from Financier to Supplier would occur here via token transfer)
+        create FactoredInvoice with ..
+
+    -- Supplier can cancel the request before it's funded
+    choice CancelFactoring : ContractId Invoice
+      controller supplier
+      do
+        create Invoice with ..
+
+-- 4. The finalized factored invoice. The buyer now owes the financier
+template FactoredInvoice
+  with
+    supplier : Party
+    buyer : Party
+    financier : Party
+    invoiceId : Text
+    amount : Decimal
+    dueDate : Date
+    discountedAmount : Decimal
+  where
+    signatory supplier, buyer, financier
+
+    -- Buyer pays the full amount to the financier on the due date
+    choice PayMaturity : ()
+      controller buyer
+      do
+        -- (Payment of `amount` from Buyer to Financier would occur here)
+        return ()
+
+-- 5. Test Script to verify the workflow
+setup : Script ()
+setup = script do
+  alice_supplier <- allocatePartyWithHint "AliceSupplier" (PartyIdHint "AliceSupplier")
+  bob_buyer <- allocatePartyWithHint "BobBuyer" (PartyIdHint "BobBuyer")
+  charlie_bank <- allocatePartyWithHint "CharlieBank" (PartyIdHint "CharlieBank")
+  
+  let d = date 2024 Dec 31
+
+  -- 1. Supplier proposes
+  proposalCid <- submit alice_supplier do
+    createCmd InvoiceProposal with
+      supplier = alice_supplier
+      buyer = bob_buyer
+      invoiceId = "INV-1001"
+      amount = 10000.0
+      dueDate = d
+
+  -- 2. Buyer accepts
+  invoiceCid <- submit bob_buyer do
+    exerciseCmd proposalCid AcceptInvoice
+
+  -- 3. Supplier requests factoring from the Bank
+  factoringReqCid <- submit alice_supplier do
+    exerciseCmd invoiceCid RequestFactoring with
+      financier = charlie_bank
+      discountedAmount = 9800.0
+
+  -- 4. Bank funds the request
+  factoredInvoiceCid <- submit charlie_bank do
+    exerciseCmd factoringReqCid Fund
+
+  -- 5. Buyer pays the Bank at maturity
+  submit bob_buyer do
+    exerciseCmd factoredInvoiceCid PayMaturity
+
+  return ()

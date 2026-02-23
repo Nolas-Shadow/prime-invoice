@@ -1,0 +1,314 @@
+:root {
+  /* Requested Palette: Dark Grey Backgrounds */
+  --bg-main: #18181b;
+  /* Zinc-900: Dark Grey/Light Black */
+  --bg-card: #27272a;
+  /* Zinc-800: Lighter Grey for depth */
+  --bg-sidebar: #27272a;
+
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  --border-color: #3f3f46;
+  --border-highlight: #52525b;
+
+  /* Primary Branding Actions (Electric Blue/Green) */
+  --accent-blue: #0ea5e9;
+  /* Sky Blue */
+  --accent-blue-dim: rgba(14, 165, 233, 0.15);
+
+  --accent-green: #10b981;
+  /* Emerald Green */
+  --accent-green-dim: rgba(16, 185, 129, 0.15);
+
+  --accent-cyan: #06b6d4;
+  /* Cyan (bridge between blue/green) */
+
+  --button-primary: #0ea5e9;
+  --button-hover: #0284c7;
+
+  /* Spacing & Utilities */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Layout */
+.app-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.wallet-connect {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+}
+
+.brand-network {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.brand-app {
+  font-weight: 400;
+  color: var(--text-secondary);
+  border-left: 1px solid var(--border-highlight);
+  padding-left: 0.5rem;
+}
+
+.subtitle {
+  display: none;
+  /* Hide subtitle for cleaner look */
+}
+
+/* Dashboard Grid */
+.dashboard {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 2.5rem;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1rem;
+  height: fit-content;
+}
+
+.sidebar h3 {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 1rem 0.5rem;
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.sidebar button:hover {
+  color: var(--text-primary);
+  background: var(--bg-main);
+}
+
+.sidebar button.active {
+  background: var(--bg-main);
+  color: var(--accent-blue);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent-blue);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* Role Panels (Main Content) */
+.role-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.role-panel header {
+  margin-bottom: 2rem;
+}
+
+.role-panel h2 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.role-panel p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.role-panel p strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-subtle);
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--border-highlight);
+}
+
+.card h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Theme specific card accents */
+.role-panel:nth-child(1) .card h3 {
+  border-left: 3px solid var(--accent-green);
+  padding-left: 0.75rem;
+}
+
+.buyer-panel .card h3 {
+  border-left: 3px solid var(--accent-blue);
+  padding-left: 0.75rem;
+}
+
+.financier-panel .card h3 {
+  border-left: 3px solid var(--accent-cyan);
+  padding-left: 0.75rem;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--text-secondary);
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  background: var(--bg-sidebar);
+  cursor: not-allowed;
+}
+
+/* Buttons */
+button.primary {
+  background: var(--button-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-highlight);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+button.primary:hover {
+  background: var(--button-hover);
+  border-color: var(--text-secondary);
+}
+
+/* Dynamic Accents based on context */
+.btn-propose {
+  background: var(--accent-green);
+  color: white;
+  border-color: var(--accent-green);
+}
+
+.btn-propose:hover {
+  background: #059669;
+  /* Darker emerald */
+  color: white;
+  border-color: #059669;
+}
+
+/* Empty States */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background: var(--bg-main);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}

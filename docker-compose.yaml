@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # The participant node where our DAML code runs and our users transact
+  participant:
+    image: digitalasset/canton-open-source:2.7.9
+    command: daemon -c /config/participant.conf
+    volumes:
+      - ./config:/config
+    ports:
+      - "5011:5011" # Ledger API
+      - "5012:5012" # Admin API
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # The synchronizer handles routing and ordering of messages between our node and others
+  synchronizer:
+    image: digitalasset/canton-open-source:2.7.9
+    command: daemon -c /config/synchronizer.conf
+    volumes:
+      - ./config:/config
+    ports:
+      - "5028:5028" # Public API
+      - "5029:5029" # Admin API
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # The PostgreSQL database to store the encrypted node state locally
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: canton
+      POSTGRES_PASSWORD: canton_password
+      POSTGRES_DB: canton_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canton -d canton_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
