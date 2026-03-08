@@ -66,9 +66,17 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 
 ## 📈 Roadmap & Funding
 
-We are currently seeking seeking a **$25,000 Ecosystem Grant** to:
-1. **Bootstrap Liquidity:** Fund the first cohort of live SME invoices.
-2. **Security:** Professional smart contract auditing for Mainnet launch.
+We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant** to:
+1. **Pilot Liquidity ($150,000):** Capital to fund the first major cohort of live SME invoices and prove the marketplace model.
+2. **Protocol Scaling ($75,000):** Full smart contract auditing (OpenZeppelin/Trail of Bits) and Mainnet deployment.
+3. **Core Team ($25,000):** Operating capital for final development and legal compliance/onboarding.
+
+---
+
+## 📽️ Live Pitch Deck
+
+View our interactive pitch deck here:  
+**[👉 PrimeFactoring Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-factoring/pitch_deck.html)**
 
 ---
 
