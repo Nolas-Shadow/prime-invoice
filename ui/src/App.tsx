@@ -14,9 +14,9 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <div className="brand">
-          <span className="brand-network">Base</span>
-          <span className="brand-app">PrimeFactoring</span>
+        <div className="brand" style={{ display: 'flex', alignItems: 'center' }}>
+          <span className="brand-network" style={{ marginRight: '1px', fontSize: '1.75rem' }}>Base</span>
+          <img src="/logo.svg" alt="PrimeFactoring Logo" style={{ height: '80px', transform: 'scale(1.5)', marginLeft: '12px' }} />
         </div>
         <div className="wallet-connect">
           <ConnectButton />
@@ -64,7 +64,7 @@ import { parseUnits } from 'viem';
 import { primeFactoringABI } from './abis';
 
 // TODO: Replace with actual deployed Base Sepolia address
-const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 function SupplierDashboard({ party }: { party: string }) {
   const [amount, setAmount] = useState('');

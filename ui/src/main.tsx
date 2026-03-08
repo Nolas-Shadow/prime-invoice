@@ -10,7 +10,7 @@ import {
   darkTheme
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
-import { baseSepolia, arbitrumSepolia } from 'wagmi/chains';
+import { baseSepolia, arbitrumSepolia, hardhat } from 'wagmi/chains';
 import {
   QueryClientProvider,
   QueryClient,
@@ -19,7 +19,7 @@ import {
 const config = getDefaultConfig({
   appName: 'PrimeFactoring',
   projectId: 'a52a658dfa3dfc4bc90a8a6cfda08d13', // Standard generic default for prototyping
-  chains: [baseSepolia, arbitrumSepolia],
+  chains: [hardhat, baseSepolia, arbitrumSepolia],
   ssr: false,
 });
 
