@@ -36,31 +36,17 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 - `/ui`: The PrimeFactoring dashboard and marketplace interaction layer.
 - `/scripts`: Utility scripts for deployment and transaction verification.
 
----
+## 🔒 Access & Security
 
-## 🏗 Getting Started
+**PrimeFactoring is a proprietary DeFi protocol.** 
 
-### Prerequisites
-- Node.js (v18+)
-- Docker & Docker Compose
-- [DAML SDK](https://docs.daml.com/getting-started/installation.html)
+The source code in this repository is provided for the sole purpose of investor due diligence and security auditing. 
 
-### Local Development
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-url>
-   cd prime-factoring
-   ```
+- **Authorized Access:** Access to this repository is strictly controlled. Unauthorized reproduction or redistribution of this implementation is prohibited.
+- **Security Protocols:** All smart contracts are written for the **Base L2** and utilize **DAML** for privacy-first multi-party agreement workflows.
+- **Audit Ready:** The architecture is structured for professional auditing with defined entry points and clear contract boundaries.
 
-2. **Start the ledger and infrastructure:**
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Install UI dependencies and run:**
-   ```bash
-   cd ui && npm install && npm run dev
-   ```
+Detailed technical specifications and API documentation are available to vetted partners upon request.
 
 ---
 
