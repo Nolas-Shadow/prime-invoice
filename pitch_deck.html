@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>PrimeFactoring Pitch Deck</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Reveal.js core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+
+    <!-- Reveal.js theme (Dark) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css" id="theme">
+
+    <style>
+        /* PrimeFactoring Custom Branding overlay */
+        .reveal {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            /* GitHub Dark background */
+        }
+
+        .reveal h1,
+        .reveal h2,
+        .reveal h3 {
+            text-transform: none;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .reveal section img {
+            border: none;
+            box-shadow: none;
+            background: none;
+        }
+
+        .highlight-green {
+            color: #10b981;
+            /* Emerald 500 */
+            font-weight: 800;
+        }
+
+        .highlight-blue {
+            color: #3b82f6;
+            /* Blue 500 */
+            font-weight: 800;
+        }
+
+        .reveal ul {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .reveal li {
+            margin-bottom: 20px;
+            color: #a3b8cc;
+        }
+
+        .footer-logo {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.5em;
+            color: #666;
+            z-index: 1000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo span {
+            color: #10b981;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- SLIDE 1: Title -->
+            <section data-transition="fade">
+                <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 40px;">
+                    <!-- Custom Logo -->
+                    <img src="./ui/public/logo.svg" alt="PrimeFactoring Logo" style="height: 120px;" />
+                </div>
+                <h3>The Bridge Between <span class="highlight-blue">Corporate Debt</span> and <span
+                        class="highlight-green">Web3 Liquidity</span></h3>
+                <p style="color: #64748b; font-size: 0.7em; margin-top: 50px;">Base Ecosystem Grant Proposal</p>
+            </section>
+
+            <!-- SLIDE 2: The Problem -->
+            <section data-transition="slide">
+                <h2 style="text-align: left;">The <span style="color:#ef4444;">Problem</span></h2>
+                <hr style="border-color:#333; margin-bottom: 40px;">
+                <ul style="text-align: left;">
+                    <li><strong>Cash Flow Starvation:</strong> SMEs are crippled because large corporate buyers dictate
+                        60-90 day payment cycles.</li>
+                    <li><strong>Legacy Gatekeepers:</strong> TradFi banks charge massive origination fees, require
+                        mountains of paperwork, and outright refuse to service smaller "micro-invoices."</li>
+                    <li><strong>The Result:</strong> A multi-trillion dollar supply chain market is historically
+                        underserved, leaving suppliers desperate for immediate working capital.</li>
+                </ul>
+            </section>
+
+            <!-- SLIDE 3: The Solution -->
+            <section data-transition="slide">
+                <h2 style="text-align: left;">The <span class="highlight-green">Solution</span></h2>
+                <hr style="border-color:#333; margin-bottom: 40px;">
+                <p style="text-align: left; font-size: 1.1em;">PrimeFactoring is a Decentralized Invoice Marketplace.
+                </p>
+                <ul style="text-align: left;">
+                    <li><strong>Real-World Assets (RWAs):</strong> We tokenize actual corporate invoices into
+                        high-yield, short-duration (30/60/90 day) digital assets.</li>
+                    <li><strong>Permissionless Liquidity:</strong> Any Web3 user with USDC can step in as a "Financier",
+                        earning institutional-grade yield.</li>
+                    <li><strong>Cryptographic Truth:</strong> Buyers digitally sign the invoice on-chain, mathematically
+                        eliminating the risk of "double-financing fraud".</li>
+                </ul>
+            </section>
+
+            <!-- SLIDE 4: Why Web3? -->
+            <section data-transition="slide">
+                <h2 style="text-align: left;">Why Build on <span class="highlight-blue">Base</span>?</h2>
+                <hr style="border-color:#333; margin-bottom: 40px;">
+                <div style="display: flex; gap: 40px; text-align: left; margin-top: 40px;">
+                    <div
+                        style="flex: 1; background: #1e293b; padding: 20px; border-radius: 12px; border-top: 4px solid #3b82f6;">
+                        <h4 style="margin-top: 0;">Speed</h4>
+                        <p style="font-size: 0.8em; color: #cbd5e1;">Legacy factoring takes 5 business days. Base
+                            settles atomic, trustless invoice funding in <strong>2 seconds</strong>.</p>
+                    </div>
+                    <div
+                        style="flex: 1; background: #1e293b; padding: 20px; border-radius: 12px; border-top: 4px solid #10b981;">
+                        <h4 style="margin-top: 0;">Cost</h4>
+                        <p style="font-size: 0.8em; color: #cbd5e1;">Sub-cent transaction fees mean we can profitably
+                            factor small "micro-invoices" that traditional lenders ignore.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: Revenue Model -->
+            <section data-transition="slide">
+                <h2 style="text-align: left;">Protocol <span class="highlight-green">Revenue</span></h2>
+                <hr style="border-color:#333; margin-bottom: 40px;">
+                <p style="text-align: left; color: #94a3b8; font-style: italic;">We do not rely on Ponzinomics or
+                    hyper-inflationary token emissions.</p>
+                <div
+                    style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 30px; border-radius: 16px; margin-top: 40px;">
+                    <h1 style="color: #10b981; margin: 0; font-size: 4em;">1.0%</h1>
+                    <p style="font-size: 1.2em; margin-top: 10px;"><strong>(100 BPS) Origination Fee</strong></p>
+                    <p style="font-size: 0.8em; color: #94a3b8; margin-top: 20px;">Deducted seamlessly inside the smart
+                        contract executing upon liquidity settlement and routed to the Protocol Treasury. Generating
+                        pure USDC cashflow from Day 1.</p>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: The Ask -->
+            <section data-transition="zoom">
+                <h2>The <span class="highlight-blue">Grant Request</span></h2>
+                <p style="font-size: 1.2em;">We are seeking an ecosystem grant of:</p>
+                <h1 style="color: #3b82f6; font-size: 3.5em; margin: 20px 0;">$25,000</h1>
+
+                <div style="display: flex; gap: 20px; margin-top: 40px;">
+                    <div style="flex: 1; text-align: right;">
+                        <span class="highlight-green" style="font-size: 1.5em;">$20,000</span>
+                    </div>
+                    <div style="flex: 2; text-align: left; color: #94a3b8;">
+                        <strong>Bootstrap Liquidity:</strong> Capital to immediately fund our first pilot cohort of live
+                        SME invoices.
+                    </div>
+                </div>
+                <div style="display: flex; gap: 20px; margin-top: 20px;">
+                    <div style="flex: 1; text-align: right;">
+                        <span class="highlight-blue" style="font-size: 1.5em;">$5,000</span>
+                    </div>
+                    <div style="flex: 2; text-align: left; color: #94a3b8;">
+                        <strong>Security:</strong> Smart Contract Auditing prior to Mainnet launch.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 7: Conclusion -->
+            <section data-transition="fade">
+                <img src="./ui/public/logo.svg" alt="PrimeFactoring Logo" style="height: 80px; margin-bottom: 30px;" />
+                <h2>Thank You.</h2>
+                <p style="color: #64748b;">Bringing the Real World on-chain.</p>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Persistent Branding Footer -->
+    <div class="footer-logo">P<span>F</span></div>
+
+    <!-- Reveal.js Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            transition: 'slide' // none/fade/slide/convex/concave/zoom
+        });
+    </script>
+</body>
+
+</html>
