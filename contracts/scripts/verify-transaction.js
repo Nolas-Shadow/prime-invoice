@@ -5,8 +5,8 @@ async function main() {
   const [owner, buyer] = await ethers.getSigners();
   const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   
-  console.log("Connecting to PrimeFactoring at:", contractAddress);
-  const primeFactoring = await ethers.getContractAt("PrimeFactoring", contractAddress);
+  console.log("Connecting to PrimeInvoice at:", contractAddress);
+  const primeFactoring = await ethers.getContractAt("PrimeInvoice", contractAddress);
 
   const amount = ethers.parseUnits("1000", 6); // 1000 USDC
   const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30; // 30 days
