@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import hre from "hardhat";
 
-describe("PrimeFactoring", function () {
+describe("PrimeInvoice", function () {
     let usdcToken;
     let primeFactoring;
     let owner, supplier, buyer, financier;
@@ -15,8 +15,8 @@ describe("PrimeFactoring", function () {
         usdcToken = await MockERC20.deploy("USD Coin", "USDC", initialSupply);
 
         // Deploy the Protocol Contract
-        const PrimeFactoring = await hre.ethers.getContractFactory("PrimeFactoring");
-        primeFactoring = await PrimeFactoring.deploy(usdcToken.target, owner.address);
+        const PrimeInvoice = await hre.ethers.getContractFactory("PrimeInvoice");
+        primeFactoring = await PrimeInvoice.deploy(usdcToken.target, owner.address);
 
         // Distribute testing funds
         await usdcToken.transfer(buyer.address, hre.ethers.parseUnits("100000", 6));
