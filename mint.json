@@ -1,10 +1,10 @@
 {
   "name": "Prime Invoice",
   "logo": {
-    "light": "/banner_logo.svg",
-    "dark": "/banner_logo.svg"
+    "light": "/DOCS/logo.svg",
+    "dark": "/DOCS/logo.svg"
   },
-  "favicon": "/favicon.ico",
+  "favicon": "/DOCS/logo.svg",
   "colors": {
     "primary": "#10b981",
     "light": "#34d399",
@@ -14,20 +14,20 @@
     {
       "group": "Getting Started",
       "pages": [
-        "introduction"
+        "DOCS/introduction"
       ]
     },
     {
       "group": "Protocol Concepts",
       "pages": [
-        "protocol-logic",
-        "math-and-fees"
+        "DOCS/protocol-logic",
+        "DOCS/math-and-fees"
       ]
     },
     {
       "group": "Legal & Compliance",
       "pages": [
-        "legal-and-compliance"
+        "DOCS/legal-and-compliance"
       ]
     }
   ],
