@@ -1,0 +1,41 @@
+# Prime Invoice Protocol
+
+> DeFi Invoice Factoring Protocol on Base (L2). Tokenizing corporate invoices for SME liquidity.
+
+## Core Logic & Math
+
+### Fee Structure (Total 10%)
+- **30-Day Term**: 200 BPS Protocol / 800 BPS Financier Yield.
+- **60-Day Term**: 150 BPS Protocol / 850 BPS Financier Yield.
+- **90-Day Term**: 100 BPS Protocol / 900 BPS Financier Yield.
+
+### Workflow
+1. `proposeInvoice`: SME Supplier -> Buyer (Proposed)
+2. `approveInvoice`: Buyer -> Blockchain (Approved)
+3. `factorInvoice`: Financier -> Supplier (Factored)
+4. `repayInvoice`: Buyer -> Financier (Repaid)
+
+## API Reference (Solidity)
+
+### Write Functions
+- `proposeInvoice(address _buyer, uint256 _amount, uint256 _dueDate, uint256 _termDays)`
+- `approveInvoice(uint256 _invoiceId)`
+- `factorInvoice(uint256 _invoiceId)`
+- `repayInvoice(uint256 _invoiceId)`
+- `verifyBuyer(address _buyer, bool _status)` (Admin Only)
+- `verifySupplier(address _supplier, bool _status)` (Admin Only)
+
+### Read Functions
+- `invoices(uint256 id)` -> Invoice Struct
+- `calculateFees(uint256 _amount, uint256 _termDays)` -> (protocolFee, financierYield, totalFee, supplierPayout)
+- `verifiedBuyers(address)` -> bool
+- `verifiedSuppliers(address)` -> bool
+
+## RWA & Legal Compliance
+- **Asset Link**: Each invoice maps to an off-chain legal claim.
+- **Dispute Resolution**: On-chain status (`Factored`, `Repaid`) serves as evidence for off-chain legal enforcement.
+- **Clawback**: Protocol owner/admin manages legal attestations stored in IPFS/on-chain metadata.
+
+## Guides
+- [Docs Root](https://prime-invoice.pages.dev/docs/introduction)
+- [Architecture](https://github.com/Nolas-Shadow/prime-invoice/blob/main/AGENTS.md)

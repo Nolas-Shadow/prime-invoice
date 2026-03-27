@@ -59,10 +59,27 @@ We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant*
 
 ---
 
-## 📽️ Live Pitch Deck
+---
 
-View our interactive pitch deck here:  
-**[👉 Prime Invoice Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-invoice/pitch_deck.html)**
+## 📽️ Live Pitch Deck & Docs
+
+- **[👉 Prime Invoice Digital Pitch Deck](https://prime-invoice.pages.dev/pitch_deck.html)**
+- **[🤖 AI Agents Knowledge Base (AGENTS.md)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/AGENTS.md)**
+- **[📝 LLM Optimized Docs (llms.txt)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/llms.txt)**
+- **[📖 Interactive Documentation](https://prime-invoice.pages.dev/docs/introduction)**
+
+---
+
+## 🏗️ Repository Structure
+
+| Path | Purpose |
+| :--- | :--- |
+| `/ui` | React + Vite frontend application (Base/Cloudflare Root) |
+| `/contracts` | Solidity smart contracts and Hardhat environment |
+| `/daml` | Digital Asset Modeling Language agreement logic |
+| `/docs` | Mintlify-compatible interactive documentation |
+| `AGENTS.md` | Machine-readable protocol specification for AI agents |
+| `llms.txt` | Token-efficient knowledge base for LLMs |
 
 ---
 

@@ -1,0 +1,37 @@
+{
+  "name": "Prime Invoice",
+  "logo": {
+    "light": "/banner_logo.svg",
+    "dark": "/banner_logo.svg"
+  },
+  "favicon": "/favicon.ico",
+  "colors": {
+    "primary": "#10b981",
+    "light": "#34d399",
+    "dark": "#064e3b"
+  },
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction"
+      ]
+    },
+    {
+      "group": "Protocol Concepts",
+      "pages": [
+        "protocol-logic",
+        "math-and-fees"
+      ]
+    },
+    {
+      "group": "Legal & Compliance",
+      "pages": [
+        "legal-and-compliance"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/Nolas-Shadow/prime-invoice"
+  }
+}
