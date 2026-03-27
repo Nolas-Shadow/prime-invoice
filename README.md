@@ -10,7 +10,7 @@ Prime Invoice is a Decentralized Invoice Marketplace built to bridge the $3T+ gl
 
 Traditional Factoring (selling invoices for immediate cash) is broken:
 - **Cash Flow Starvation:** SMEs wait 60–90 days for payment.
-- **Legacy Gatekeepers:** High fees and manual overhead make "micro-invoices" (under $50k) unprofitable for banks.
+- **Legacy Gatekeepers:** High fees and manual overhead make high-value corporate invoices (>$50k) surprisingly underserved by traditional lenders.
 - **Fraud Risk:** "Double-financing" errors are common in siloed bank systems.
 
 **Prime Invoice solves this on Base:**
