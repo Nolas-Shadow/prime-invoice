@@ -15,7 +15,7 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <div className="brand">
-          <img src="/logo.svg" alt="Prime Invoice Logo" className="logo-banner" />
+          <img src="/banner_logo.svg" alt="Prime Invoice Logo" className="logo-banner" />
         </div>
         <div className="wallet-connect">
           <ConnectButton />

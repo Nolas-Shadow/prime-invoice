@@ -72,8 +72,9 @@ body {
 }
 
 .logo-banner {
-  height: 80px;
-  width: auto;
+  height: 150px;
+  width: 472px;
+  object-fit: contain;
   transition: transform 0.2s ease;
 }
 

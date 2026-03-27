@@ -62,7 +62,7 @@ We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant*
 ## 📽️ Live Pitch Deck
 
 View our interactive pitch deck here:  
-**[👉 Prime Invoice Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-factoring/pitch_deck.html)**
+**[👉 Prime Invoice Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-invoice/pitch_deck.html)**
 
 ---
 
