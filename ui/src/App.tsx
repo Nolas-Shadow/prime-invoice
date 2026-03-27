@@ -15,13 +15,7 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <div className="brand">
-          <span className="brand-network">Base</span>
-          <span className="brand-separator">|</span>
-          <span className="brand-app">
-            Prime
-            Invoice
-            <img src="/logo.svg" alt="logo" className="logo-inline" />
-          </span>
+          <img src="/logo.svg" alt="Prime Invoice Logo" className="logo-banner" />
         </div>
         <div className="wallet-connect">
           <ConnectButton />
