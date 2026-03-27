@@ -61,12 +61,12 @@ We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant*
 
 ---
 
-## 📽️ Live Pitch Deck & Docs
+## 📽️ Live Pitch Deck & Documents
 
 - **[👉 Prime Invoice Digital Pitch Deck](https://prime-invoice.pages.dev/pitch_deck.html)**
-- **[🤖 AI Agents Knowledge Base (AGENTS.md)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/AGENTS.md)**
-- **[📝 LLM Optimized Docs (llms.txt)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/llms.txt)**
-- **[📖 Interactive Documentation](https://prime-invoice.pages.dev/docs/introduction)**
+- **[📄 Protocol Specifications (AGENTS.md)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/AGENTS.md)**
+- **[🧾 Machine-Readable Summary (llms.txt)](https://github.com/Nolas-Shadow/prime-invoice/blob/main/llms.txt)**
+- **[📖 Interactive Documents (Built with Mintlify)](https://github.com/Nolas-Shadow/prime-invoice/tree/main/DOCS)**
 
 ---
 
@@ -77,9 +77,9 @@ We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant*
 | `/ui` | React + Vite frontend application (Base/Cloudflare Root) |
 | `/contracts` | Solidity smart contracts and Hardhat environment |
 | `/daml` | Digital Asset Modeling Language agreement logic |
-| `/docs` | Mintlify-compatible interactive documentation |
-| `AGENTS.md` | Machine-readable protocol specification for AI agents |
-| `llms.txt` | Token-efficient knowledge base for LLMs |
+| `/DOCS` | Mintlify-compatible documentation suite |
+| `AGENTS.md` | Protocol Specifications for automated systems |
+| `llms.txt` | Machine-readable technical summary |
 
 ---
 
