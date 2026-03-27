@@ -1,8 +1,8 @@
-# PrimeInvoice 🏦 ⛓️
+# Prime Invoice 🏦 ⛓️
 
 ### Bridge Between Corporate Debt and Web3 Liquidity
 
-PrimeInvoice is a Decentralized Invoice Marketplace built to bridge the $3T+ global supply chain finance gap. By tokenizing corporate invoices into Real-World Assets (RWAs), we provide SMEs with immediate working capital while offering Web3 investors institutional-grade, short-duration yield.
+Prime Invoice is a Decentralized Invoice Marketplace built to bridge the $3T+ global supply chain finance gap. By tokenizing corporate invoices into Real-World Assets (RWAs), we provide SMEs with immediate working capital while offering Web3 investors institutional-grade, short-duration yield.
 
 ---
 
@@ -13,7 +13,7 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 - **Legacy Gatekeepers:** High fees and manual overhead make "micro-invoices" (under $50k) unprofitable for banks.
 - **Fraud Risk:** "Double-financing" errors are common in siloed bank systems.
 
-**PrimeInvoice solves this on Base:**
+**Prime Invoice solves this on Base:**
 - **Instant Settlement:** Atomic invoice funding in seconds on the Base network.
 - **Low Cost:** Sub-cent transaction fees allow for micro-factoring at scale.
 - **Verified Truth:** Cryptographic signatures from buyers eliminate double-financing fraud.
@@ -33,12 +33,12 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 
 - `/contracts`: Smart contracts for invoice tokenization and settlement.
 - `/daml`: Core agreement logic and ledger templates.
-- `/ui`: The PrimeInvoice dashboard and marketplace interaction layer.
+- `/ui`: The Prime Invoice dashboard and marketplace interaction layer.
 - `/scripts`: Utility scripts for deployment and transaction verification.
 
 ## 🔒 Access & Security
 
-**PrimeInvoice is a proprietary DeFi protocol.** 
+**Prime Invoice is a proprietary DeFi protocol.** 
 
 The source code in this repository is provided for the sole purpose of investor due diligence and security auditing. 
 
@@ -62,7 +62,7 @@ We are currently seeking seeking a **$250,000 Seed Investment / Ecosystem Grant*
 ## 📽️ Live Pitch Deck
 
 View our interactive pitch deck here:  
-**[👉 PrimeInvoice Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-factoring/pitch_deck.html)**
+**[👉 Prime Invoice Digital Pitch Deck](https://Nolas-Shadow.github.io/prime-factoring/pitch_deck.html)**
 
 ---
 

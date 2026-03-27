@@ -10,16 +10,16 @@ import {
   darkTheme
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
-import { baseSepolia, arbitrumSepolia, hardhat } from 'wagmi/chains';
+import { baseSepolia } from 'wagmi/chains';
 import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
 
 const config = getDefaultConfig({
-  appName: 'PrimeFactoring',
-  projectId: 'a52a658dfa3dfc4bc90a8a6cfda08d13', // Standard generic default for prototyping
-  chains: [hardhat, baseSepolia, arbitrumSepolia],
+  appName: 'Prime Invoice',
+  projectId: '0227bb3c3c788df7908b9cbfdec19e07',
+  chains: [baseSepolia],
   ssr: false,
 });
 

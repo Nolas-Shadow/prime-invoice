@@ -3,6 +3,12 @@ module Main where
 import Daml.Script
 import DA.Date
 
+-- Prime Invoice - DeFi Invoice Factoring Protocol
+-- Fee Structure:
+-- 30-day invoice: 2% protocol, 8% financier
+-- 60-day invoice: 1.5% protocol, 8.5% financier
+-- 90-day invoice: 1% protocol, 9% financier
+
 -- 1. Supplier proposes an invoice to the Buyer
 template InvoiceProposal
   with
@@ -11,6 +17,7 @@ template InvoiceProposal
     invoiceId : Text
     amount : Decimal
     dueDate : Date
+    termDays : Int
   where
     signatory supplier
     observer buyer
