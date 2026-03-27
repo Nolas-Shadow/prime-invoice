@@ -10,7 +10,7 @@ export default buildModule("PrimeInvoiceModule", (m) => {
     const protocolOwner = m.getAccount(0);
 
     // 3. Deploy PrimeInvoice, passing the MockUSDC address and Owner
-    const primeFactoring = m.contract("PrimeInvoice", [mockUSDC, protocolOwner]);
+    const primeInvoice = m.contract("PrimeInvoice", [mockUSDC, protocolOwner]);
 
-    return { mockUSDC, primeFactoring };
+    return { mockUSDC, primeInvoice };
 });

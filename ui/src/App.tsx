@@ -14,9 +14,14 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <div className="brand" style={{ display: 'flex', alignItems: 'center' }}>
-          <span className="brand-network" style={{ marginRight: '1px', fontSize: '1.75rem' }}>Base</span>
-          <img src="/logo.svg" alt="PrimeFactoring Logo" style={{ height: '80px', transform: 'scale(1.5)', marginLeft: '12px' }} />
+        <div className="brand">
+          <span className="brand-network">Base</span>
+          <span className="brand-separator">|</span>
+          <span className="brand-app">
+            Prime
+            Invoice
+            <img src="/logo.svg" alt="logo" className="logo-inline" />
+          </span>
         </div>
         <div className="wallet-connect">
           <ConnectButton />
@@ -61,7 +66,7 @@ function App() {
 // ----------------------------------------------------- //
 import { useWriteContract } from 'wagmi';
 import { parseUnits } from 'viem';
-import { primeFactoringABI } from './abis';
+import { primeInvoiceABI } from './abis';
 
 // TODO: Replace with actual deployed Base Sepolia address
 const CONTRACT_ADDRESS = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
@@ -80,13 +85,11 @@ function SupplierDashboard({ party }: { party: string }) {
     }
 
     try {
-      // 30 days from now in Unix Seconds
       const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30;
-      // USDC has 6 decimals
       const amountInUSDC = parseUnits(amount, 6);
 
       const txHash = await writeContractAsync({
-        abi: primeFactoringABI,
+        abi: primeInvoiceABI,
         address: CONTRACT_ADDRESS,
         functionName: 'proposeInvoice',
         args: [
@@ -114,15 +117,15 @@ function SupplierDashboard({ party }: { party: string }) {
         <div className="card">
           <h3>Draft New Invoice Proposal</h3>
           <div className="form-group">
-            <label>Invoice ID:</label>
+            <label>INVOICE ID:</label>
             <input type="text" value={invoiceId} onChange={e => setInvoiceId(e.target.value)} placeholder="INV-2024-001" />
           </div>
           <div className="form-group">
-            <label>Amount (USD):</label>
+            <label>AMOUNT (USD):</label>
             <input type="number" value={amount} onChange={e => setAmount(e.target.value)} placeholder="50000" />
           </div>
           <div className="form-group">
-            <label>Billed To (Buyer Web3 Address):</label>
+            <label>BILLED TO (BUYER WEB3 ADDRESS):</label>
             <input type="text" value={buyerAddress} onChange={e => setBuyerAddress(e.target.value)} placeholder="0x..." />
           </div>
           <button className="primary btn-propose" onClick={handlePropose}>Submit to Buyer</button>
@@ -130,17 +133,15 @@ function SupplierDashboard({ party }: { party: string }) {
 
         <div className="card">
           <h3>My Active Invoices</h3>
-          <div className="empty-state">No active approved invoices to factor.</div>
-          {/* Real implementation would map over active 'Main:Invoice' contracts */}
+          <div className="empty-state">
+            No active approved invoices to factor.
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// ----------------------------------------------------- //
-// 2. Buyer Dashboard (Accepts Proposals, Pays at Maturity)
-// ----------------------------------------------------- //
 function BuyerDashboard({ party }: { party: string }) {
   return (
     <div className="role-panel buyer-panel">
@@ -153,11 +154,10 @@ function BuyerDashboard({ party }: { party: string }) {
         <div className="card">
           <h3>Pending Invoice Approvals</h3>
           <div className="empty-state">No pending proposals from suppliers.</div>
-          {/* Real implementation would query 'Main:InvoiceProposal' and show Accept/Reject choices */}
         </div>
 
         <div className="card">
-          <h3>Upcoming Liabilities</h3>
+          <h3>Approved History</h3>
           <div className="empty-state">No outstanding invoices to pay.</div>
         </div>
       </div>
@@ -165,9 +165,6 @@ function BuyerDashboard({ party }: { party: string }) {
   );
 }
 
-// ----------------------------------------------------- //
-// 3. Financier Dashboard (Funds Factoring Requests)
-// ----------------------------------------------------- //
 function FinancierDashboard({ party }: { party: string }) {
   return (
     <div className="role-panel financier-panel">
@@ -177,10 +174,63 @@ function FinancierDashboard({ party }: { party: string }) {
       </header>
 
       <div className="card-grid">
-        <div className="card highlight-card">
+        <div className="info-section">
+          <h3>Why Provide Liquidity? (The Incentive)</h3>
+          <p>
+            Financiers fund approved invoices at a fixed <strong style={{ color: 'var(--accent-cyan)' }}>10% total discount</strong> across the Base network.
+            Yields are structured dynamically based on the invoice's maturity date.
+          </p>
+          <ul className="yield-table">
+            <li>
+              <span><strong>30-Day Invoice:</strong> 8% Yield to Financier</span>
+              <span className="yield-value">(2% Protocol Fee)</span>
+            </li>
+            <li>
+              <span><strong>60-Day Invoice:</strong> 8.5% Yield to Financier</span>
+              <span className="yield-value">(1.5% Protocol Fee)</span>
+            </li>
+            <li>
+              <span><strong>90-Day Invoice:</strong> 9% Yield to Financier</span>
+              <span className="yield-value">(1% Protocol Fee)</span>
+            </li>
+          </ul>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+            Example: You fund a $100,000 90-day invoice for $90,000. At maturity, the smart contract routes exactly $99,000 back to you, 
+            securing a guaranteed <strong style={{ color: 'var(--accent-cyan)' }}>$9,000 profit</strong> safely backed by real-world Corporate liabilities.
+          </p>
+        </div>
+
+        <div className="card demand-card">
+          <div className="risk-badge">Low Risk - Verified</div>
           <h3>Incoming Factoring Demands</h3>
-          <div className="empty-state">No immediate factoring requests matching risk profile.</div>
-          {/* Real implementation queries 'Main:FactoringRequest' */}
+          
+          <div style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+            <div style={{ color: 'var(--accent-cyan)', fontWeight: 700, marginBottom: '0.5rem' }}>INV-2026-045</div>
+            <div className="stat-label">Supplier: <strong>Acme Widgets</strong></div>
+            <div className="amount-highlight">
+              <span className="amount-strikethrough">$100,000</span> → $90,000
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>(10% discount)</div>
+            </div>
+            <div className="stats-row">
+              <div><span className="stat-label">Due:</span> <span className="stat-value">30 Days</span></div>
+              <div><span className="stat-label">Yield:</span> <span className="stat-value" style={{ color: 'var(--accent-green)' }}>8%</span></div>
+            </div>
+            <button className="primary" style={{ marginTop: '1rem' }}>Fund Invoice</button>
+          </div>
+
+          <div style={{ padding: '1rem', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+            <div style={{ color: 'var(--accent-cyan)', fontWeight: 700, marginBottom: '0.5rem' }}>INV-2026-078</div>
+            <div className="stat-label">Supplier: <strong>TechNova Solutions</strong></div>
+            <div className="amount-highlight">
+              <span className="amount-strikethrough">$150,000</span> → $135,000
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>(10% discount)</div>
+            </div>
+            <div className="stats-row">
+              <div><span className="stat-label">Due:</span> <span className="stat-value">60 Days</span></div>
+              <div><span className="stat-label">Yield:</span> <span className="stat-value" style={{ color: 'var(--accent-green)' }}>8.5%</span></div>
+            </div>
+            <button className="primary" style={{ marginTop: '1rem' }}>Fund Invoice</button>
+          </div>
         </div>
       </div>
     </div>

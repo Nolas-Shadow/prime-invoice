@@ -3,7 +3,7 @@ import hre from "hardhat";
 
 describe("PrimeInvoice", function () {
     let usdcToken;
-    let primeFactoring;
+    let primeInvoice;
     let owner, supplier, buyer, financier;
     const initialSupply = hre.ethers.parseUnits("1000000", 6); // 1M USDC
 
@@ -16,7 +16,7 @@ describe("PrimeInvoice", function () {
 
         // Deploy the Protocol Contract
         const PrimeInvoice = await hre.ethers.getContractFactory("PrimeInvoice");
-        primeFactoring = await PrimeInvoice.deploy(usdcToken.target, owner.address);
+        primeInvoice = await PrimeInvoice.deploy(usdcToken.target, owner.address);
 
         // Distribute testing funds
         await usdcToken.transfer(buyer.address, hre.ethers.parseUnits("100000", 6));
@@ -28,11 +28,11 @@ describe("PrimeInvoice", function () {
         const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30; // 30 days from now
 
         // Supplier creates the invoice
-        await expect(primeFactoring.connect(supplier).proposeInvoice(buyer.address, amount, dueDate))
-            .to.emit(primeFactoring, "InvoiceProposed")
+        await expect(primeInvoice.connect(supplier).proposeInvoice(buyer.address, amount, dueDate))
+            .to.emit(primeInvoice, "InvoiceProposed")
             .withArgs(1, supplier.address, buyer.address, amount);
 
-        const invoice = await primeFactoring.invoices(1);
+        const invoice = await primeInvoice.invoices(1);
         expect(invoice.supplier).to.equal(supplier.address);
         expect(invoice.amount).to.equal(amount);
     });
@@ -43,21 +43,21 @@ describe("PrimeInvoice", function () {
         const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30;
 
         // 1. Supplier Proposes
-        await primeFactoring.connect(supplier).proposeInvoice(buyer.address, amount, dueDate);
+        await primeInvoice.connect(supplier).proposeInvoice(buyer.address, amount, dueDate);
 
         // 2. Buyer Approves
-        await primeFactoring.connect(buyer).approveInvoice(1);
-        const approvedInvoice = await primeFactoring.invoices(1);
+        await primeInvoice.connect(buyer).approveInvoice(1);
+        const approvedInvoice = await primeInvoice.invoices(1);
         expect(approvedInvoice.status).to.equal(1); // 1 = Approved Enum
 
         // 3. Financier Funds (Needs to approve protocol to spend their USDC first)
-        await usdcToken.connect(financier).approve(primeFactoring.target, amount);
+        await usdcToken.connect(financier).approve(primeInvoice.target, amount);
 
         // Expect 100 bps protocol fee = $100.00
         // Supplier should receive $9900.00
         // Financier spends $10000.00
-        await expect(primeFactoring.connect(financier).factorInvoice(1))
-            .to.emit(primeFactoring, "InvoiceFactored")
+        await expect(primeInvoice.connect(financier).factorInvoice(1))
+            .to.emit(primeInvoice, "InvoiceFactored")
             .withArgs(1, financier.address);
 
         const supplierBalance = await usdcToken.balanceOf(supplier.address);
@@ -68,8 +68,8 @@ describe("PrimeInvoice", function () {
         expect(protocolBalance).to.equal(hre.ethers.parseUnits("800100", 6));
 
         // 4. Buyer Repays at Maturity
-        await usdcToken.connect(buyer).approve(primeFactoring.target, amount);
-        await primeFactoring.connect(buyer).repayInvoice(1);
+        await usdcToken.connect(buyer).approve(primeInvoice.target, amount);
+        await primeInvoice.connect(buyer).repayInvoice(1);
 
         // Financier should get their $10,000 principal/yield back from the contract
         const finalFinancierBal = await usdcToken.balanceOf(financier.address);

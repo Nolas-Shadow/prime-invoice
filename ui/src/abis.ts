@@ -1,4 +1,4 @@
-export const primeFactoringABI = [
+export const primeInvoiceABI = [
     {
         "inputs": [
             {

@@ -6,7 +6,7 @@ async function main() {
   const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   
   console.log("Connecting to PrimeInvoice at:", contractAddress);
-  const primeFactoring = await ethers.getContractAt("PrimeInvoice", contractAddress);
+  const primeInvoice = await ethers.getContractAt("PrimeInvoice", contractAddress);
 
   const amount = ethers.parseUnits("1000", 6); // 1000 USDC
   const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30; // 30 days
@@ -14,13 +14,13 @@ async function main() {
   console.log("Submitting proposal from Supplier:", owner.address);
   console.log("Targeting Buyer:", buyer.address);
 
-  const tx = await primeFactoring.proposeInvoice(buyer.address, amount, dueDate);
+  const tx = await primeInvoice.proposeInvoice(buyer.address, amount, dueDate);
   console.log("Transaction Hash:", tx.hash);
 
   const receipt = await tx.wait();
   console.log("Transaction Confirmed in Block:", receipt.blockNumber);
 
-  const invoice = await primeFactoring.invoices(1);
+  const invoice = await primeInvoice.invoices(1);
   console.log("Verified Invoice State in Contract:");
   console.log(" - ID:", invoice.id.toString());
   console.log(" - Supplier:", invoice.supplier);
