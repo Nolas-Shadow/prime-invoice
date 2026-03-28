@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Prime Invoice"
-  text: "The Infrastructure for Institutional Trade Finance"
+  text: "A RWA Protocol for Institutional-Grade SME Loan Participation"
   tagline: "Tokenizing Corporate Debt with Precision and Safety"
   image:
     src: /logo.svg
