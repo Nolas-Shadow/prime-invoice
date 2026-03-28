@@ -5,7 +5,9 @@ export default defineConfig({
   description: "Institutional Trade Finance Infrastructure",
   base: "/prime-invoice/",
   themeConfig: {
-    logo: '/prime-invoice/logo.svg',
+    logo: {
+      src: '/logo.svg'
+    },
     nav: [
       { text: 'Introduction', link: '/introduction' },
       { text: 'Protocol', link: '/protocol-logic' }

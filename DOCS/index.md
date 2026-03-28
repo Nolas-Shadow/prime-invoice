@@ -6,7 +6,7 @@ hero:
   text: "A RWA Protocol for Institutional-Grade SME Loan Participation"
   tagline: "Tokenizing Corporate Debt with Precision and Safety"
   image:
-    src: logo.svg
+    src: /logo.svg
     alt: Prime Invoice Logo
   actions:
     - theme: brand
