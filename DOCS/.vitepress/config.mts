@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Prime Invoice",
   description: "Institutional Trade Finance Infrastructure",
+  base: "/prime-invoice/",
   themeConfig: {
     logo: '/logo.svg',
     nav: [
