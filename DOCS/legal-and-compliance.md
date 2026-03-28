@@ -27,5 +27,6 @@ Because the Financier holds a perfected legal assignment, they have the right to
 
 ## Compliance Modules
 
-- **KYC/KYB**: All participants (Suppliers, Buyers, Financiers) must undergo Know-Your-Customer (KYC) or Know-Your-Business (KYB) checks before being "Verified" on-chain.
-- **Sanctions Screening**: The protocol automatically screens addresses against global sanctions lists (OFAC, etc.) prior to verification.
+- **KYC/KYB**: All **Suppliers and Buyers** must undergo Know-Your-Customer (KYC) or Know-Your-Business (KYB) checks before being "Verified" on-chain.
+- **Privacy-First Funding**: Being a DeFi-native protocol, **Financiers** (liquidity providers) can supply capital permissionlessly and without mandatory KYC, providing they meet the blockchain-level anti-money laundering (AML) address screening.
+- **Sanctions Screening**: The protocol automatically screens addresses against global sanctions lists (OFAC, etc.) prior to interaction.
