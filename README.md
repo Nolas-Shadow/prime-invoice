@@ -42,9 +42,6 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 
 The source code in this repository is provided for the sole purpose of investor due diligence and security auditing. 
 
-- **Authorized Access:** Access to this repository is strictly controlled.
-- **Security Protocols:** All smart contracts utilize **DAML** for privacy-first multi-party agreement workflows.
-- **Audit Ready:** The architecture is structured for professional auditing with defined entry points and clear contract boundaries.
 
 ---
 
@@ -57,10 +54,15 @@ We are currently scaling the protocol through the following milestones:
 
 ---
 
-## 📽️ Live Pitch Deck & Documents
+## 📽️ Institutional Assets
 
-- **[👉 Prime Invoice Digital Pitch Deck](https://prime-invoice.pages.dev/pitch_deck.html)**
-- **[📖 Protocol Documentation (VitePress)](https://github.com/Nolas-Shadow/prime-invoice/tree/main/DOCS)**
+- **[👉 Launch Digital Pitch Deck](https://prime-invoice.pages.dev/pitch_deck.html)**
+- **[📖 View Institutional Documents](https://nolas-shadow.github.io/prime-invoice/)**
+
+## ⚖️ Compliance & Privacy
+
+- **Financiers:** 100% Privacy-First. No mandatory KYC for liquidity providers.
+- **Suppliers & Buyers:** Strict KYC/KYB audits required to ensure protocol integrity and asset quality.
 
 ---
 
