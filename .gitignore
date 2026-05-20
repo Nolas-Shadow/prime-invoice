@@ -35,6 +35,9 @@ artifacts/
 typechain/
 typechain-types/
 
+# Local Hardhat deployments (chain-31337 = localhost)
+deployments/chain-31337/
+
 # DAML/Canton
 .daml
 log/
