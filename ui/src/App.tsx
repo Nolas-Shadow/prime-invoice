@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useWriteContract, useReadContract, useWatchContractEvent, usePublicClient } from 'wagmi';
+import { useAccount, useWriteContract, useReadContract } from 'wagmi';
 import { parseUnits, formatUnits } from 'viem';
 import { primeInvoiceABI } from './abis';
 
@@ -26,8 +26,6 @@ const STATUS_LABEL: Record<number, string> = {
   3: 'Repaid',
   4: 'Cancelled',
 };
-
-const FEE_TERMS = [30, 60, 90] as const;
 
 // ------ Types ------
 interface InvoiceData {
@@ -221,7 +219,7 @@ function SupplierDashboard({ party }: { party: string }) {
         abi: primeInvoiceABI,
         address: CONTRACT_ADDRESS,
         functionName: 'proposeInvoice',
-        args: [buyerAddress, amountInUSDC, BigInt(dueDate), BigInt(termDays)],
+        args: [buyerAddress as `0x${string}`, amountInUSDC, BigInt(dueDate), BigInt(termDays)],
       });
 
       setTx({ status: 'confirmed', hash });
@@ -341,7 +339,7 @@ function BuyerDashboard({ party }: { party: string }) {
           type: 'function',
         } as const,
       ];
-      const approveHash = await writeContractAsync({
+      await writeContractAsync({
         abi: usdcABI,
         address: CONTRACT_ADDRESS, // This will be the USDC address in production
         functionName: 'approve',
@@ -435,7 +433,6 @@ function FinancierDashboard({ party }: { party: string }) {
   const [tx, setTx] = useState<TxState>({ status: 'idle' });
   const [selectedInvoice, setSelectedInvoice] = useState<bigint | null>(null);
   const { writeContractAsync } = useWriteContract();
-  const publicClient = usePublicClient();
 
   const { invoices, loading } = useInvoices();
 
@@ -443,7 +440,6 @@ function FinancierDashboard({ party }: { party: string }) {
   const fundableInvoices = invoices.filter((inv) => inv.status === STATUS.Approved);
 
   // Invoices I have already funded
-  const isFinancier = party !== 'Not Connected';
   const partyLower = party.toLowerCase();
   const myFundedInvoices = invoices.filter(
     (inv) => inv.financier.toLowerCase() === partyLower && (inv.status === STATUS.Factored || inv.status === STATUS.Repaid)
@@ -484,7 +480,7 @@ function FinancierDashboard({ party }: { party: string }) {
     setSelectedInvoice(null);
   };
 
-  const formatFee = (amount: bigint, termDays: bigint, isYield: boolean) => {
+  const formatFee = (_amount: bigint, termDays: bigint, isYield: boolean) => {
     if (termDays === 30n) return isYield ? '8%' : '2%';
     if (termDays === 60n) return isYield ? '8.5%' : '1.5%';
     return isYield ? '9%' : '1%';
