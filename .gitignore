@@ -42,3 +42,9 @@ deployments/chain-31337/
 .daml
 log/
 navigator.log
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
