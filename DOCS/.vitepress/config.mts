@@ -7,8 +7,8 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     nav: [
-      { text: 'Introduction', link: 'introduction' },
-      { text: 'Protocol', link: 'protocol-logic' }
+      { text: 'Introduction', link: '/introduction' },
+      { text: 'Protocol', link: '/protocol-logic' }
     ],
     sidebar: [
       {

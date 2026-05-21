@@ -27,6 +27,10 @@ Because the Financier holds a perfected legal assignment, they have the right to
 
 ## Compliance Modules
 
-- **KYC/KYB**: All **Suppliers and Buyers** must undergo Know-Your-Customer (KYC) or Know-Your-Business (KYB) checks before being "Verified" on-chain.
-- **Privacy-First Funding**: Being a DeFi-native protocol, **Financiers** (liquidity providers) can supply capital permissionlessly and without mandatory KYC, providing they meet the blockchain-level anti-money laundering (AML) address screening.
-- **Sanctions Screening**: The protocol automatically screens addresses against global sanctions lists (OFAC, etc.) prior to interaction.
+> [!IMPORTANT]
+> **Dual-Layer Verification Policy**
+> Prime Invoice maintains a high-integrity ecosystem through strict entity verification while providing privacy-first liquidity access.
+
+- **Mandatory KYC/KYB**: All **Suppliers (Borrowers) and Buyers (Debtors)** must undergo comprehensive Know-Your-Customer (KYC) or Know-Your-Business (KYB) checks before being "Verified" on-chain.
+- **Privacy-First Funding**: **Financiers** (liquidity providers) can supply capital permissionlessly and without mandatory KYC, provided they pass automated blockchain-level AML/Sanctions screening.
+- **Sanctions Screening**: The protocol automatically screens all participating addresses against global sanctions lists (OFAC, etc.).

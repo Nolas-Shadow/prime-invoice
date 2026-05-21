@@ -16,9 +16,11 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
+const projectId = import.meta.env.VITE_RAINBOW_PROJECT_ID || '0227bb3c3c788df7908b9cbfdec19e07';
+
 const config = getDefaultConfig({
   appName: 'Prime Invoice',
-  projectId: '0227bb3c3c788df7908b9cbfdec19e07',
+  projectId: projectId,
   chains: [baseSepolia],
   ssr: false,
 });

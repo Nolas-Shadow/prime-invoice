@@ -11,10 +11,14 @@ async function main() {
   const amount = ethers.parseUnits("1000", 6); // 1000 USDC
   const dueDate = Math.floor(Date.now() / 1000) + 86400 * 30; // 30 days
 
+  console.log("Verifying entities (Supplier & Buyer) on-chain...");
+  await (await primeInvoice.verifySupplier(owner.address, true)).wait();
+  await (await primeInvoice.verifyBuyer(buyer.address, true)).wait();
+
   console.log("Submitting proposal from Supplier:", owner.address);
   console.log("Targeting Buyer:", buyer.address);
 
-  const tx = await primeInvoice.proposeInvoice(buyer.address, amount, dueDate);
+  const tx = await primeInvoice.proposeInvoice(buyer.address, amount, dueDate, 30);
   console.log("Transaction Hash:", tx.hash);
 
   const receipt = await tx.wait();

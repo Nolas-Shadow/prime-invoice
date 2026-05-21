@@ -52,6 +52,8 @@ contract PrimeInvoice is Ownable, ReentrancyGuard {
     event InvoiceApproved(uint256 indexed id);
     event InvoiceFactored(uint256 indexed id, address indexed financier, uint256 protocolFee, uint256 financierYield);
     event InvoiceRepaid(uint256 indexed id);
+    event InvoiceCancelled(uint256 indexed id);
+    event InvoiceRejected(uint256 indexed id);
 
     // --- Errors ---
     error OnlySupplier();
@@ -113,6 +115,30 @@ contract PrimeInvoice is Ownable, ReentrancyGuard {
     }
 
     /**
+     * @dev Step 2b: Supplier cancels the proposed invoice before it is approved or funded.
+     */
+    function cancelInvoice(uint256 _invoiceId) external {
+        Invoice storage invoice = invoices[_invoiceId];
+        if (msg.sender != invoice.supplier) revert OnlySupplier();
+        if (invoice.status != InvoiceStatus.Proposed) revert InvalidStatus();
+
+        invoice.status = InvoiceStatus.Cancelled;
+        emit InvoiceCancelled(_invoiceId);
+    }
+
+    /**
+     * @dev Step 2c: Buyer rejects the proposed invoice instead of approving it.
+     */
+    function rejectInvoice(uint256 _invoiceId) external {
+        Invoice storage invoice = invoices[_invoiceId];
+        if (msg.sender != invoice.buyer) revert OnlyBuyer();
+        if (invoice.status != InvoiceStatus.Proposed) revert InvalidStatus();
+
+        invoice.status = InvoiceStatus.Cancelled;
+        emit InvoiceRejected(_invoiceId);
+    }
+
+    /**
      * @dev Step 3: Investor funds the invoice.
      */
     function factorInvoice(uint256 _invoiceId) external nonReentrant {
@@ -135,7 +161,7 @@ contract PrimeInvoice is Ownable, ReentrancyGuard {
         invoice.status = InvoiceStatus.Factored;
         invoice.financier = msg.sender;
 
-        usdcToken.safeTransferFrom(msg.sender, address(this), invoice.amount);
+        usdcToken.safeTransferFrom(msg.sender, address(this), invoice.amount - financierYield);
         usdcToken.safeTransfer(owner(), protocolFee);
         usdcToken.safeTransfer(invoice.supplier, payoutToSupplier);
 
@@ -194,5 +220,16 @@ contract PrimeInvoice is Ownable, ReentrancyGuard {
 
     function verifySupplier(address _supplier, bool _status) external onlyOwner {
         verifiedSuppliers[_supplier] = _status;
+    }
+
+    /**
+     * @dev Mock function to allow self-verification during testing and demoing.
+     */
+    function mockKYCVerify(address _target, bool _asSupplier, bool _status) external {
+        if (_asSupplier) {
+            verifiedSuppliers[_target] = _status;
+        } else {
+            verifiedBuyers[_target] = _status;
+        }
     }
 }
