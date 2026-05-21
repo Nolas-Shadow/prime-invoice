@@ -1,8 +1,19 @@
-import pkg from 'hardhat';
-const { ethers } = pkg;
+import { ethers } from 'ethers';
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// DAML HTTP JSON API URL (Canton local proxy / sandbox ledger)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load ABI from local JSON file
+const abiPath = path.join(__dirname, 'abis', 'PrimeInvoice.json');
+const primeInvoiceABI = JSON.parse(fs.readFileSync(abiPath, 'utf8'));
+
+// Configuration from environment variables
+const RPC_URL = process.env.RPC_URL || 'http://localhost:8545';
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 const DAML_JSON_API_URL = process.env.DAML_JSON_API_URL || 'http://localhost:7575/v1';
 
 // Active DAML Ledger Templates
@@ -28,17 +39,18 @@ async function callDamlLedger(endpoint, payload) {
 }
 
 async function main() {
-  const contractAddress = process.env.CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
   console.log("====================================================");
   console.log("   PRIME INVOICE: DAML-SOLIDITY INTEGRATION RELAYER");
   console.log("====================================================");
-  console.log("Connecting to Solidity Contract at:", contractAddress);
+  console.log("Connecting to RPC URL:", RPC_URL);
+  console.log("Contract Address:", CONTRACT_ADDRESS);
   console.log("Targeting DAML Ledger JSON API at:", DAML_JSON_API_URL);
 
-  const primeInvoice = await ethers.getContractAt("PrimeInvoice", contractAddress);
+  const provider = new ethers.JsonRpcProvider(RPC_URL);
+  const primeInvoice = new ethers.Contract(CONTRACT_ADDRESS, primeInvoiceABI, provider);
 
   // 1. Listen for InvoiceProposed (Supplier -> Buyer)
-  primeInvoice.on("InvoiceProposed", async (id, supplier, buyer, amount, termDays, event) => {
+  primeInvoice.on("InvoiceProposed", async (id, supplier, buyer, amount, termDays) => {
     const invoiceId = id.toString();
     const amountUSDC = ethers.formatUnits(amount, 6);
     const term = termDays.toString();
@@ -65,13 +77,12 @@ async function main() {
   });
 
   // 2. Listen for InvoiceApproved (Buyer -> Supplier)
-  primeInvoice.on("InvoiceApproved", async (id, event) => {
+  primeInvoice.on("InvoiceApproved", async (id) => {
     const invoiceId = id.toString();
     console.log(`\n🔔 [Solidity Event] InvoiceApproved!`);
     console.log(`   - ID: ${invoiceId}`);
 
     // Synchronize to DAML Ledger: Exercise AcceptInvoice choice
-    // First, query for the matching Proposal Contract ID
     const proposals = await callDamlLedger('/query', { templateIds: [TEMPLATE_PROPOSAL] });
     if (proposals) {
       const match = proposals.find(p => p.payload.invoiceId === `INV-${invoiceId}`);
@@ -89,7 +100,7 @@ async function main() {
   });
 
   // 3. Listen for InvoiceFactored (Financier funds the invoice)
-  primeInvoice.on("InvoiceFactored", async (id, financier, protocolFee, financierYield, event) => {
+  primeInvoice.on("InvoiceFactored", async (id, financier, protocolFee, financierYield) => {
     const invoiceId = id.toString();
     console.log(`\n🔔 [Solidity Event] InvoiceFactored!`);
     console.log(`   - ID: ${invoiceId}`);
@@ -98,12 +109,11 @@ async function main() {
     console.log(`   - Financier Yield: $${ethers.formatUnits(financierYield, 6)} USDC`);
 
     // Synchronize to DAML Ledger: Transition state to FactoredInvoice
-    // Find the accepted invoice
     const invoices = await callDamlLedger('/query', { templateIds: [TEMPLATE_INVOICE] });
     if (invoices) {
       const match = invoices.find(inv => inv.payload.invoiceId === `INV-${invoiceId}`);
       if (match) {
-        // 1. Supplier requests factoring on DAML
+        // Supplier requests factoring on DAML
         const reqResult = await callDamlLedger('/exercise', {
           templateId: TEMPLATE_INVOICE,
           contractId: match.contractId,
@@ -114,7 +124,7 @@ async function main() {
           }
         });
         
-        // 2. Financier funds the request on DAML
+        // Financier funds the request on DAML
         if (reqResult && reqResult.events) {
           const reqCid = reqResult.events[0].created.contractId;
           await callDamlLedger('/exercise', {
@@ -129,7 +139,7 @@ async function main() {
   });
 
   // 4. Listen for InvoiceRepaid (Buyer pays Financier at Maturity)
-  primeInvoice.on("InvoiceRepaid", async (id, event) => {
+  primeInvoice.on("InvoiceRepaid", async (id) => {
     const invoiceId = id.toString();
     console.log(`\n🔔 [Solidity Event] InvoiceRepaid!`);
     console.log(`   - ID: ${invoiceId}`);

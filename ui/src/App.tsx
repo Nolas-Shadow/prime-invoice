@@ -5,6 +5,12 @@ import { useAccount } from 'wagmi';
 import { BrowserProvider, Contract, formatUnits, parseUnits } from 'ethers';
 import { primeInvoiceABI } from './abis';
 
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 
 // Minimal ERC20 ABI for USDC interactions
@@ -37,7 +43,6 @@ function App() {
   const [isVerifiedSupplier, setIsVerifiedSupplier] = useState(false);
   const [isVerifiedBuyer, setIsVerifiedBuyer] = useState(false);
   const [invoices, setInvoices] = useState<InvoiceData[]>([]);
-  const [loading, setLoading] = useState(false);
   const [txPending, setTxPending] = useState(false);
   const [alertMsg, setAlertMsg] = useState<AlertMessage | null>(null);
 
@@ -54,7 +59,6 @@ function App() {
   // Main read function to query contract states
   const refreshData = async () => {
     if (!isConnected || !address || !window.ethereum) return;
-    setLoading(true);
     try {
       const provider = new BrowserProvider(window.ethereum as any);
       const contract = new Contract(CONTRACT_ADDRESS, primeInvoiceABI, provider);
@@ -90,8 +94,6 @@ function App() {
     } catch (err: any) {
       console.error("Failed to query contract state:", err);
       showAlert('error', `Failed to load blockchain data: ${err.message || err}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -638,7 +640,7 @@ function BuyerDashboard({ party, isVerified, invoices, setTxPending, showAlert, 
     }
   };
 
-  const handleApproveUSDC = async (id: number, amountStr: string) => {
+  const handleApproveUSDC = async (_id: number, amountStr: string) => {
     if (!window.ethereum) return;
     setTxPending(true);
     showAlert('info', `Approving USDC spend of $${parseFloat(amountStr).toLocaleString()}...`);
@@ -858,7 +860,7 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
     fetchAllowances();
   }, [invoices, party]);
 
-  const handleApproveUSDC = async (id: number, outlayStr: string) => {
+  const handleApproveUSDC = async (_id: number, outlayStr: string) => {
     if (!window.ethereum) return;
     setTxPending(true);
     showAlert('info', `Approving USDC spend of $${parseFloat(outlayStr).toLocaleString()}...`);
