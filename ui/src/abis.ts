@@ -22,6 +22,11 @@ export const primeInvoiceABI = [
   },
   {
     "inputs": [],
+    "name": "DuplicateInvoice",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "InvalidAmount",
     "type": "error"
   },
@@ -95,7 +100,17 @@ export const primeInvoiceABI = [
   },
   {
     "inputs": [],
+    "name": "SelfServiceKycDisabled",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "SupplierNotVerified",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "Unauthorized",
     "type": "error"
   },
   {
@@ -122,6 +137,19 @@ export const primeInvoiceABI = [
       }
     ],
     "name": "InvoiceCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvoiceDefaulted",
     "type": "event"
   },
   {
@@ -235,6 +263,19 @@ export const primeInvoiceABI = [
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "SelfServiceKycSet",
     "type": "event"
   },
   {
@@ -424,6 +465,19 @@ export const primeInvoiceABI = [
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_invoiceId",
+        "type": "uint256"
+      }
+    ],
+    "name": "markDefaulted",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_target",
         "type": "address"
@@ -538,6 +592,32 @@ export const primeInvoiceABI = [
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "selfServiceKyc",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bool",
+        "name": "_enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "setSelfServiceKyc",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -558,6 +638,25 @@ export const primeInvoiceABI = [
         "internalType": "contract IERC20",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "usedInvoiceKeys",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -637,4 +736,4 @@ export const primeInvoiceABI = [
     "stateMutability": "nonpayable",
     "type": "function"
   }
-];
+] as const;

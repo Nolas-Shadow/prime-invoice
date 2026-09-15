@@ -35,6 +35,7 @@ Traditional Factoring (selling invoices for immediate cash) is broken:
 - `/daml`: Core agreement logic and ledger templates.
 - `/ui`: The Prime Invoice dashboard and marketplace interaction layer.
 - `/DOCS`: Technical specifications and user guides.
+- **[AUDIT.md](./AUDIT.md): Pilot audit, claim-vs-code map, and prioritized fix plan.**
 
 ## 🔒 Access & Security
 

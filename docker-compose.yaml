@@ -1,5 +1,11 @@
 version: '3.8'
 
+# Local Canton nodes for DAML experiments. This is NOT a complete ledger:
+# - participant is not auto-connected to the synchronizer (needs a bootstrap script)
+# - HTTP JSON API on :7575 is not included (ui/src/damlClient.ts and the Solidity
+#   bridge expect it). See AUDIT.md P0-9 / P1-4.
+# SDK in daml.yaml is 2.8.0; this image is 2.7.9 — align before relying on DAR uploads.
+
 services:
   # The participant node where our DAML code runs and our users transact
   participant:
@@ -43,6 +49,7 @@ services:
       retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./config/postgres-init.sh:/docker-entrypoint-initdb.d/01-create-dbs.sh
 
 volumes:
   postgres_data:

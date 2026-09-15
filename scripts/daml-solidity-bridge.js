@@ -42,6 +42,9 @@ async function main() {
   console.log("====================================================");
   console.log("   PRIME INVOICE: DAML-SOLIDITY INTEGRATION RELAYER");
   console.log("====================================================");
+  console.log("WARNING: Ethereum addresses are not DAML parties. /create will fail");
+  console.log("until an operator maps wallets → ledger parties and signs JSON API");
+  console.log("requests. Ledger errors are logged; they are not retried. See AUDIT.md.");
   console.log("Connecting to RPC URL:", RPC_URL);
   console.log("Contract Address:", CONTRACT_ADDRESS);
   console.log("Targeting DAML Ledger JSON API at:", DAML_JSON_API_URL);

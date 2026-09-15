@@ -28,7 +28,7 @@ interface InvoiceData {
   amount: string; // Formatted USDC string
   dueDate: number; // Unix timestamp
   termDays: number;
-  status: number; // 0=Proposed, 1=Approved, 2=Factored, 3=Repaid, 4=Cancelled
+  status: number; // 0=Proposed, 1=Approved, 2=Factored, 3=Repaid, 4=Cancelled, 5=Defaulted
 }
 
 interface AlertMessage {
@@ -42,6 +42,7 @@ function App() {
 
   const [isVerifiedSupplier, setIsVerifiedSupplier] = useState(false);
   const [isVerifiedBuyer, setIsVerifiedBuyer] = useState(false);
+  const [selfServiceKyc, setSelfServiceKyc] = useState(true);
   const [invoices, setInvoices] = useState<InvoiceData[]>([]);
   const [txPending, setTxPending] = useState(false);
   const [alertMsg, setAlertMsg] = useState<AlertMessage | null>(null);
@@ -68,6 +69,11 @@ function App() {
       const isBuy = await contract.verifiedBuyers(address);
       setIsVerifiedSupplier(isSup);
       setIsVerifiedBuyer(isBuy);
+      try {
+        setSelfServiceKyc(Boolean(await contract.selfServiceKyc()));
+      } catch {
+        setSelfServiceKyc(true);
+      }
 
       // Fetch all invoices
       const nextId = await contract.nextInvoiceId();
@@ -138,7 +144,7 @@ function App() {
       {txPending && (
         <div className="tx-loading-overlay">
           <div className="spinner"></div>
-          <p>Processing Transaction on Base Network... Please confirm in wallet.</p>
+          <p>Processing on-chain transaction... Please confirm in wallet.</p>
         </div>
       )}
 
@@ -189,6 +195,7 @@ function App() {
                 party={activeAddress}
                 isSupplier={isVerifiedSupplier}
                 isBuyer={isVerifiedBuyer}
+                selfServiceKyc={selfServiceKyc}
                 setTxPending={setTxPending}
                 showAlert={showAlert}
                 refreshData={refreshData}
@@ -242,12 +249,13 @@ interface IdentityHubProps {
   party: string;
   isSupplier: boolean;
   isBuyer: boolean;
+  selfServiceKyc: boolean;
   setTxPending: (p: boolean) => void;
   showAlert: (type: 'success'|'error'|'info', text: string) => void;
   refreshData: () => Promise<void>;
 }
 
-function IdentityKYCHub({ party, isSupplier, isBuyer, setTxPending, showAlert, refreshData }: IdentityHubProps) {
+function IdentityKYCHub({ party, isSupplier, isBuyer, selfServiceKyc, setTxPending, showAlert, refreshData }: IdentityHubProps) {
   const [companyName, setCompanyName] = useState('');
   const [taxId, setTaxId] = useState('');
   const [role, setRole] = useState<'supplier' | 'buyer'>('supplier');
@@ -256,6 +264,11 @@ function IdentityKYCHub({ party, isSupplier, isBuyer, setTxPending, showAlert, r
     e.preventDefault();
     if (!companyName || !taxId) {
       showAlert('error', 'Please fill out all registration fields.');
+      return;
+    }
+
+    if (!selfServiceKyc) {
+      showAlert('error', 'Self-service KYC is disabled on this deployment. Ask the protocol owner to call verifySupplier/verifyBuyer.');
       return;
     }
 
@@ -332,7 +345,9 @@ function IdentityKYCHub({ party, isSupplier, isBuyer, setTxPending, showAlert, r
                 <option value="buyer">Corporate Buyer (Invoice Obligor)</option>
               </select>
             </div>
-            <button type="submit" className="primary btn-propose">Run KYC and Register</button>
+            <button type="submit" className="primary btn-propose" disabled={!selfServiceKyc}>
+              {selfServiceKyc ? 'Run demo KYC and Register' : 'Owner allowlist only (demo KYC off)'}
+            </button>
           </form>
         </div>
       </div>
@@ -443,6 +458,7 @@ function SupplierDashboard({ party, isVerified, invoices, setTxPending, showAler
       case 2: return 'Factored';
       case 3: return 'Repaid';
       case 4: return 'Cancelled';
+      case 5: return 'Defaulted';
       default: return 'Unknown';
     }
   };
@@ -694,12 +710,10 @@ function BuyerDashboard({ party, isVerified, invoices, setTxPending, showAlert, 
       case 1: return 'Approved';
       case 2: return 'Factored';
       case 3: return 'Repaid';
+      case 5: return 'Defaulted';
       default: return 'Unknown';
     }
   };
-
-  return (
-    <div className="role-panel buyer-panel">
       <header>
         <h2>Corporate Buyer Terminal</h2>
         <p>Logged in as: <strong>{party}</strong></p>
@@ -791,19 +805,18 @@ function BuyerDashboard({ party, isVerified, invoices, setTxPending, showAlert, 
                         <td>
                           {isFactored && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                              {!isApproved ? (
+                              {!isDue ? (
+                                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                                  Repay opens on {new Date(inv.dueDate * 1000).toLocaleDateString()}
+                                </span>
+                              ) : !isApproved ? (
                                 <button className="action-btn btn-approve" onClick={() => handleApproveUSDC(inv.id, inv.amount)}>
                                   Approve USDC
                                 </button>
                               ) : (
                                 <button className="action-btn btn-fund" onClick={() => handleRepay(inv.id)}>
-                                  Repay Invoice {!isDue && "(Early Repay)"}
+                                  Repay Invoice
                                 </button>
-                              )}
-                              {!isDue && (
-                                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-                                  Not due until maturity
-                                </span>
                               )}
                             </div>
                           )}
@@ -905,6 +918,27 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
     }
   };
 
+  const handleMarkDefaulted = async (id: number) => {
+    if (!window.ethereum) return;
+    setTxPending(true);
+    showAlert('info', `Marking invoice #${id} defaulted (status only; no USDC clawback)...`);
+    try {
+      const provider = new BrowserProvider(window.ethereum as any);
+      const signer = await provider.getSigner();
+      const contract = new Contract(CONTRACT_ADDRESS, primeInvoiceABI, signer);
+
+      const tx = await contract.markDefaulted(id);
+      await tx.wait();
+      showAlert('success', `Invoice #${id} marked defaulted. Collection is off-chain.`);
+      await refreshData();
+    } catch (err: any) {
+      console.error(err);
+      showAlert('error', `Mark default failed: ${err.reason || err.message || err}`);
+    } finally {
+      setTxPending(false);
+    }
+  };
+
   const incomingDemands = invoices.filter(inv => inv.status === 1);
   const myPortfolio = invoices.filter(inv => inv.financier.toLowerCase() === party.toLowerCase());
 
@@ -921,6 +955,7 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
     switch (status) {
       case 2: return 'Factored';
       case 3: return 'Repaid';
+      case 5: return 'Defaulted';
       default: return 'Unknown';
     }
   };
@@ -936,7 +971,7 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
         <div className="info-section">
           <h3>Why Provide Liquidity? (The Incentive)</h3>
           <p>
-            Financiers fund approved invoices at a fixed <strong style={{ color: 'var(--accent-cyan)' }}>10% total discount</strong> across the Base network.
+            Financiers fund approved invoices at a fixed <strong style={{ color: 'var(--accent-cyan)' }}>10% total discount</strong> on the configured EVM network.
             Yields are structured dynamically based on the invoice's maturity date.
           </p>
           <ul className="yield-table">
@@ -1018,11 +1053,13 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
                     <th>Net Profit</th>
                     <th>Maturity</th>
                     <th>Status</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {myPortfolio.map((inv) => {
                     const { outlay, financierYield } = getOutlayAndYield(inv.amount, inv.termDays);
+                    const isPastDue = Date.now() / 1000 >= inv.dueDate;
                     return (
                       <tr key={inv.id}>
                         <td>#{inv.id}</td>
@@ -1036,6 +1073,13 @@ function FinancierDashboard({ party, invoices, setTxPending, showAlert, refreshD
                           <span className={`status-pill status-${getStatusText(inv.status).toLowerCase()}`}>
                             {getStatusText(inv.status)}
                           </span>
+                        </td>
+                        <td>
+                          {inv.status === 2 && isPastDue && (
+                            <button className="action-btn btn-reject" onClick={() => handleMarkDefaulted(inv.id)}>
+                              Mark default
+                            </button>
+                          )}
                         </td>
                       </tr>
                     );
