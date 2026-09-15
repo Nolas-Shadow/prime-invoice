@@ -37,6 +37,9 @@ export const fetchContracts = async (templateId: string) => {
     }
 };
 
+// Note: App.tsx does not import this module. The dashboard is Solidity-only.
+// A working ledger client needs a DAML party JWT, not a raw Ethereum address.
+
 /**
  * Submit a command to create a new contract.
  * @param templateId The fully qualified template ID (e.g. 'Main:InvoiceProposal')

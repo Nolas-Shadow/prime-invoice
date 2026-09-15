@@ -8,6 +8,9 @@ import DA.Date
 -- 30-day invoice: 2% protocol, 8% financier
 -- 60-day invoice: 1.5% protocol, 8.5% financier
 -- 90-day invoice: 1% protocol, 9% financier
+--
+-- Payments are recorded as workflow state only. USDC settlement lives in
+-- Solidity (non-custodial transferFrom payer -> recipient).
 
 -- 1. Supplier proposes an invoice to the Buyer
 template InvoiceProposal
@@ -25,7 +28,13 @@ template InvoiceProposal
     choice AcceptInvoice : ContractId Invoice
       controller buyer
       do
-        create Invoice with ..
+        create Invoice with
+          supplier
+          buyer
+          invoiceId
+          amount
+          dueDate
+          termDays
 
     choice RejectInvoice : ()
       controller buyer
@@ -40,6 +49,7 @@ template Invoice
     invoiceId : Text
     amount : Decimal
     dueDate : Date
+    termDays : Int
   where
     signatory supplier, buyer
 
@@ -50,7 +60,15 @@ template Invoice
         discountedAmount : Decimal
       controller supplier
       do
-        create FactoringRequest with ..
+        create FactoringRequest with
+          supplier
+          buyer
+          financier
+          invoiceId
+          amount
+          dueDate
+          termDays
+          discountedAmount
 
 -- 3. The Supplier's request to the Financier
 template FactoringRequest
@@ -61,6 +79,7 @@ template FactoringRequest
     invoiceId : Text
     amount : Decimal
     dueDate : Date
+    termDays : Int
     discountedAmount : Decimal
   where
     signatory supplier, buyer
@@ -70,14 +89,27 @@ template FactoringRequest
     choice Fund : ContractId FactoredInvoice
       controller financier
       do
-        -- (In a full implementation, a payment of `discountedAmount` from Financier to Supplier would occur here via token transfer)
-        create FactoredInvoice with ..
+        create FactoredInvoice with
+          supplier
+          buyer
+          financier
+          invoiceId
+          amount
+          dueDate
+          termDays
+          discountedAmount
 
     -- Supplier can cancel the request before it's funded
     choice CancelFactoring : ContractId Invoice
       controller supplier
       do
-        create Invoice with ..
+        create Invoice with
+          supplier
+          buyer
+          invoiceId
+          amount
+          dueDate
+          termDays
 
 -- 4. The finalized factored invoice. The buyer now owes the financier
 template FactoredInvoice
@@ -88,15 +120,20 @@ template FactoredInvoice
     invoiceId : Text
     amount : Decimal
     dueDate : Date
+    termDays : Int
     discountedAmount : Decimal
   where
     signatory supplier, buyer, financier
 
-    -- Buyer pays the full amount to the financier on the due date
+    -- Buyer acknowledges maturity payment on the ledger (cash moves on-chain)
     choice PayMaturity : ()
       controller buyer
       do
-        -- (Payment of `amount` from Buyer to Financier would occur here)
+        return ()
+
+    choice MarkDefaulted : ()
+      controller financier
+      do
         return ()
 
 -- 5. Test Script to verify the workflow
@@ -105,7 +142,7 @@ setup = script do
   alice_supplier <- allocatePartyWithHint "AliceSupplier" (PartyIdHint "AliceSupplier")
   bob_buyer <- allocatePartyWithHint "BobBuyer" (PartyIdHint "BobBuyer")
   charlie_bank <- allocatePartyWithHint "CharlieBank" (PartyIdHint "CharlieBank")
-  
+
   let d = date 2024 Dec 31
 
   -- 1. Supplier proposes
@@ -116,6 +153,7 @@ setup = script do
       invoiceId = "INV-1001"
       amount = 10000.0
       dueDate = d
+      termDays = 30
 
   -- 2. Buyer accepts
   invoiceCid <- submit bob_buyer do
@@ -125,7 +163,7 @@ setup = script do
   factoringReqCid <- submit alice_supplier do
     exerciseCmd invoiceCid RequestFactoring with
       financier = charlie_bank
-      discountedAmount = 9800.0
+      discountedAmount = 9200.0
 
   -- 4. Bank funds the request
   factoredInvoiceCid <- submit charlie_bank do

@@ -630,6 +630,7 @@ button.primary:hover {
 .status-factored { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid #f59e0b; }
 .status-repaid { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
 .status-cancelled { background: rgba(113, 113, 122, 0.15); color: var(--text-secondary); border: 1px solid var(--text-muted); }
+.status-defaulted { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid #ef4444; }
 
 /* Action Buttons */
 .action-btn {
